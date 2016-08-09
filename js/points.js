@@ -1,5 +1,5 @@
-define(["proj4", "leaflet", "os_map", "leaflet_cluster", "leaflet_subgroup", "leaflet_matrixlayers"],
-    function(proj4, leaflet, os_map, leaflet_cluster, leaflet_subgroup, leaflet_matrixlayers) {
+define(["proj4", "leaflet", "leaflet_cluster", "leaflet_subgroup", "leaflet_matrixlayers"],
+    function(proj4, leaflet, leaflet_cluster, leaflet_subgroup, leaflet_matrixlayers) {
 	
 		var icons = {
 			Pillar: leaflet.icon({
@@ -12,13 +12,13 @@ define(["proj4", "leaflet", "os_map", "leaflet_cluster", "leaflet_subgroup", "le
 				iconAnchor: [11, 27],
 				popupAnchor: [0, -23]
 			}),
-		}
+		};
 	
 		var Points = leaflet.Class.extend({
-			initialize: function (osMap) {
+			initialize: function (map, config) {
 				this._markerList = null;
-				this._map = osMap.getMap();
-				this._config = osMap.getConfig();
+				this._map = map;
+				this._config = config;
 			},
 
 			add: function (lngLat, url, name, extraText, type, condition) {
@@ -50,13 +50,17 @@ define(["proj4", "leaflet", "os_map", "leaflet_cluster", "leaflet_subgroup", "le
 					if (this._markerList == null) {
 						this._markerList = {};
 					}
-					if (this._markerList[type] == null) {
+					var markersByType = this._markerList[type];
+					if (markersByType == null) {
 						this._markerList[type] = {};
+						markersByType = this._markerList[type];
 					}
-					if (this._markerList[type][condition] == null) {
-						this._markerList[type][condition] = new Array();
+					var markersByCondition = markersByType[condition];
+					if (markersByCondition == null) {
+						markersByType[condition] = [];
+						markersByCondition = markersByType[condition];
 					}
-					this._markerList[type][condition].push(marker);
+					markersByCondition.push(marker);
 				} else {
 					if (this._markerList == null) {
 						this._markerList = [];

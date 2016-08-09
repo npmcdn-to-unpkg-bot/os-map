@@ -2,20 +2,20 @@
 define(["proj4"],
 	function(proj4) {
 		
-		var osgbProj = "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs";
+		var osgbProj = proj4("+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs");
 
 		function pad(num, w) {
 			var n = num.toString();
 			while (n.length < w) n = '0' + n;
 			return n;
-		};
+		}
 
 		return {
 			latLngToGridRef: function(lat, lng) {
 
 				var digits = 10;
 				
-				var out = proj4(osgbProj, [lng, lat]);//from WSG84
+				var out = osgbProj.forward([lng, lat]);//from WSG84
 				var eastings = out[0];
 				var northings = out[1];
 
@@ -28,7 +28,7 @@ define(["proj4"],
 				if (isNaN(e) || isNaN(n)) throw new Error('Invalid grid reference');
 
 				// use digits = 0 to return numeric format (in metres)
-				if (digits == 0) return pad(e, 6)+','+pad(n, 6);
+				if (digits === 0) return pad(e, 6)+','+pad(n, 6);
 
 				// get the 100km-grid indices
 				var e100k = Math.floor(e/100000), n100k = Math.floor(n/100000);
@@ -54,7 +54,7 @@ define(["proj4"],
 			},
 
 			osgbToLngLat: function(eastings, northings) {
-				var out = proj4(osgbProj).inverse([eastings, northings]);//to WSG84
+				var out = osgbProj.inverse([eastings, northings]);//to WSG84
 				return out;
 			},
 			
@@ -102,7 +102,7 @@ define(["proj4"],
 
 			gridRefToLngLat: function(/*String*/ gridref) {
 				var lngLat = this.gridRefToOsgb(gridref);
-				var out = proj4(osgbProj).inverse(lngLat);//to WSG84
+				var out = osgbProj.inverse(lngLat);//to WSG84
 				return out;
 			}
 		};
