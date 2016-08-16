@@ -123,7 +123,7 @@ var mobileBrowsers = {
 //if doing an extended test
 for (var browser in extraBrowsers) { browsers[browser] = extraBrowsers[browser]; }
 //if doing a mobile test
-//for (var browser in mobileBrowsers) { browsers[browser] = mobileBrowsers[browser]; }
+for (var browser in mobileBrowsers) { browsers[browser] = mobileBrowsers[browser]; }
 
 module.exports = function(config) {
   baseConfig(config);
