@@ -5,12 +5,22 @@ var testFiles = [
 	"points_test.js",
 	"conversion_test.js",
 	"mobile_test.js",
-	"params_test.js"
+	"params_test.js",
+	"config_test.js",
+	"os_map_test.js",
+	"loader_test.js"
 ];
 
+testingPaths.loader = '../js/loader'; //this is a hack for testing, so no need for it to appear in app.js
 requirejs.config({
-    paths: {
-        Squire: "https://npmcdn.com/squirejs@0.2.1/src/Squire"
+    paths: testingPaths,
+    shim: {
+        sinon: {
+            exports: 'sinon'
+        },
+        loader: {
+            exports: 'loadOsMap'
+        }
     }
 });
 
