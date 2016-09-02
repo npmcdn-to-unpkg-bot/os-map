@@ -4,7 +4,7 @@ script:
   - npm run-script test_coverage_baseline
   - npm run-script test
   - npm run-script merge_test_coverage
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then npm run-script saucelabs; fi
+  - npm run-script saucelabs
 
 after_success: npm run-script coveralls
 
